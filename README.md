@@ -4,7 +4,7 @@ MH. For information on how to develop such actions, please see the notes section
 
 Build Status
 ------------
-(BUILD TAG HERE)
+[![GitHub CR Build and Push](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml/badge.svg)](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml)
 
 GitHub Actions
 --------------
