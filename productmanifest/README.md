@@ -7,7 +7,7 @@ This GitHub action currently has only been validated against the following CR.IO
 
 Build Status
 ------------
-(PUT IN BUILD TAG)
+[![GitHub CR Build and Push](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml/badge.svg)](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml)
 
 Documented Parameters
 ---------------------
