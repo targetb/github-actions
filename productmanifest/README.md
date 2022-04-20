@@ -39,7 +39,7 @@ The following are some samples of usage.
      env:
       API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
      with:
-      gitops-repo-url: https://github.com/targetb/gitops-repo
+      gitops-repo-url: https://github.com/targetb/gitops-repo@main
       manifest-file: helm/dev/values.yaml
       github-username: ${{ secrets.GIT_USER }}
       github-email: ${{ secrets.GIT_EMAIL }}
