@@ -1,2 +1,21 @@
-# github-actions
-This repo is intended to manage any custom GitHub actions that are used by any GitHub based process flows. This is primarily intended for CI/CD support, but can host others as well
+# GitHub-Actions
+This repo is used to track any GitHub actions which have been specifically developed or customised for use within
+MH. For information on how to develop such actions, please see the notes section below.
+
+Build Status
+------------
+(BUILD TAG HERE)
+
+GitHub Actions
+--------------
+The following are custom GitHub actions that have been developed for use within MH.
+
+>| Action | Description |
+>| -------- | ----------- |
+>| [productmanifest/](https://github.com/targetb/github-actions/tree/main/productmanifest) | This GitHub action is intended to be used with Helm based GitOps repos to update manifest files with rebuilt Docker image repo digests. This will trigger builds in monitored GitOps repos |
+
+Notes
+-----
+- https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
+- https://docs.github.com/en/rest/reference/packages
+- https://docs.github.com/en/github-ae@latest/rest/reference/actions#workflow-runs

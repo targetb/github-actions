@@ -1,0 +1,88 @@
+name: Update/Commit GitOps Helm value charts 
+description: >-
+  This action will allow you to update a targeted values Helm chart to update an image's tag with the
+  image SHA256 value and then commit that change to the GitOps repo.
+
+  This action is intended to be primarily used with ArgoCD GitOps repo setups.
+inputs:
+  gitops-repo-url:
+    description: The URL of the GitOps repo to clone and update
+    required: true
+  manifest-file:
+    description: The relative location of the Helm Values chart to update
+    required: true
+  github-username:
+    description: Name of the destination username/organization
+    required: true
+  github-email:
+    description: Name of the destination username/organization email
+    required: true
+  image-list:
+    description: >-
+      Image list to process. This is a CSV and takes the form of a string like...
+         <helmChartName>:<dockerImage>
+
+      For example...
+         <helmChartName>:<dockerImage1>:<tag1>,<helmChartName>:<dockerImage2>:<tag2>
+    required: false 
+    default: ''
+  image-list-file:
+    description: >-
+      Image list to process. This is a CSV file and takes the form of a string like...
+         <helmChartName>:<dockerImage>
+
+      For example...
+         <helmChartName>:<dockerImage1>:<tag1>,
+         <helmChartName>:<dockerImage2>:<tag2>,
+         <helmChartName>:<dockerImage3>:<tag3>
+
+      The file must exist in the GitOps repo and be accessible via a relative pathname 
+    required: false
+    default: 'null'    
+  git-token:
+    description: Value of the Git Token to use for the commit - usually a GITHUB PAT 
+    required: true
+  registry-server:
+    description: Docker registry server where images are held
+    default: 'docker.io'    
+    required: true
+  docker-username:
+    description: Docker username to login as
+    required: true
+  docker-passwd:
+    description: Docker password to use for the login
+    required: true
+  debug:
+    description: '[Optional] Debug action'
+    required: false
+    
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - --clone
+    - --push
+    - --git-token 
+    - '${{ inputs.git-token }}'
+    - -mgr 
+    - '${{ inputs.gitops-repo-url }}'
+    - -mf 
+    - '${{ inputs.manifest-file }}'
+    - -gu 
+    - '${{ inputs.github-username }}'
+    - -ge 
+    - '${{ inputs.github-email }}'
+    - -dl 
+    - '${{ inputs.image-list }}'
+    - -dlf
+    - '${{ inputs.image-list-file }}'    
+    - -dr 
+    - '${{ inputs.registry-server }}'
+    - -du 
+    - '${{ inputs.docker-username }}'
+    - -dp
+    - '${{ inputs.docker-passwd }}'
+    - '${{ inputs.debug }}'
+branding:
+  icon: git-commit
+  color: green
