@@ -4,7 +4,7 @@ This GitHub action is intended to be used with ArgoCD and Helm charts to help fa
 
 Build Status
 ------------
-[![GitHub CR Build and Push](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml/badge.svg)](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml
+[![GitHub CR Build and Push](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml/badge.svg)](https://github.com/targetb/github-actions/actions/workflows/main-build.yaml)
 
 Documented Parameters
 ---------------------
