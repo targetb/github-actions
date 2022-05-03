@@ -8,6 +8,7 @@ CWD=`pwd`
 
 manifestFile=
 manifestGitRepo=
+tagStr=".image.tag"
 
 targetDir=
 
@@ -89,6 +90,8 @@ while [ $# -ne 0 ] ; do
              shift 2;;
          -m | --message) gitComment=$2
              shift 2;;
+         -tgs | --tag-string) tagStr=$2
+             shift 2;;
          -d | --delete) remove=1 ; shift;;
          --debug) set -xv ; shift;;
          -p | --push) push=1 ; shift;;
@@ -127,6 +130,8 @@ elif [ "x${gitToken}" = "x" ]; then
     show_usage
 elif [ "x${gitComment}" = "x" ]; then
     gitComment="Updating product manifest for ${registryServer} images on `date`"    
+elif [ "x${tagStr}" = "x" ]; then
+    tagStr=".image.tag"    
 fi
 
 return 0
@@ -312,10 +317,10 @@ do
                 echo "-- Error: Image SHA calculation failed for ${dockerImage}"
                 return 1
             fi    
-            imageTag=$(yq eval ".${productId}.image.tag" ${1})
+            imageTag=$(yq eval ".${productId}${tagStr}" ${1})
             if [ "${imageTag}" != "x" ]; then
                 # echo "${command}: -- Updating tag ${productId}:${dockerSha}"
-                (yq eval --inplace ".${productId}.image.tag=\"${dockerSha}\"" ${1}) > "${tmpFile}" 2>&1
+                (yq eval --inplace ".${productId}${tagStr}=\"${dockerSha}\"" ${1}) > "${tmpFile}" 2>&1
                 if [ $? -gt 0 ]; then
                     cat "${tmpFile}"
                     rmFile "${tmpFile}"
