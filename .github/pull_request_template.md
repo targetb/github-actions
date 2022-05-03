@@ -9,7 +9,6 @@
 ## Checklist
 
 - [ ] I have run a build and the pre-commit hooks.
-- [ ] I have added tests to cover my changes and previous test pass.
 - [ ] I have performed a self-review of my own code.
 - [ ] I have added relevant documentation.
 
