@@ -1,0 +1,40 @@
+{
+  "extends": ["config:base"],
+  "schedule": ["before 9am on Monday"],
+  "labels": ["dependencies"],
+  "ignorePresets": [
+    ":prHourlyLimit2",
+    ":prConcurrentLimit20"
+  ],
+  "commitMessagePrefix": "deps:",
+  "rebaseWhen": "conflicted",
+  "pre-commit": {
+    "enabled": true
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "(^|/|\\.)Dockerfile$",
+        "(^|/)Dockerfile\\.[^/]*$"
+      ],
+      "matchStrings": [
+        "datasource=(?<datasource>[a-z-]+) depName=(?<depName>[^\\s]+?)(?: lookupName=(?<lookupName>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: versioning=(?<versioning>.*?))?\\s(?:ENV|ARG) .+?_VERSION=\"?(?<currentValue>[^\"]+)\"?\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "docker deps"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github action deps"
+    },
+    {
+      "matchManagers": ["pre-commit"],
+      "groupName": "pre-commit hook deps"
+    }
+  ]
+}
