@@ -21,6 +21,7 @@ userName=
 password=
 
 dockerSha=
+dockerITag=
 dockerToken=
 
 gitFolder=
@@ -56,6 +57,10 @@ usage() {
     # GitHub actions double quote where we do not want them...
     word="$(echo "$1" | sed -e 's/^"//' -e 's/"$//')"
     case $word in
+    -dt | --docker-tag)
+      dockerITag=$2
+      shift 2
+      ;;
     -du | --docker-user)
       userName=$2
       shift 2
@@ -161,6 +166,11 @@ usage() {
     gitComment="Updating product manifest for ${registryServer} images on $(date)"
   elif [ "x${tagStr}" = "x" ]; then
     tagStr=".image.tag"
+  fi
+
+  ## This seems to have some odd limit issue...
+  if [ "x${dockerITag}" = "xnull" ]; then
+    dockerITag=
   fi
 
   return 0
@@ -294,7 +304,9 @@ getDockerDigest() {
       "https://${1}/v2/${3}/manifests/${4}") >"${tmpFile}" 2>&1
   fi
 
-  dockerSha=$(cat "${tmpFile}" | grep -i Docker-Content-Digest | awk '{ print $3 }')
+  dockerSha=$(cat "${tmpFile}" | grep -i Docker-Content-Digest | awk '{ print $3 }' | tr '\r' ' ' | \
+    awk '{$1=$1;print}')
+
   retStat=$?
   if [ $retStat -gt 0 ]; then
     cat "${tmpFile}"
@@ -327,19 +339,25 @@ updateManifest() {
       dockerSha=
       if [ "x${productId}" != "x" ]; then
         echo "${command}: -- Updating ${productId} -> ${dockerBaseImage}..."
-        getDockerToken "${registryServer}" "${dockerBaseImage}" "${4}" "${5}"
-        if [ $? -gt 0 -o "x${dockerToken}" = "x" ]; then
-          echo "-- Error: Unable to get Docker token"
-          return 1
-        fi
-        getDockerDigest "${registryServer}" "${dockerToken}" "${dockerBaseImage}" "${dockerImageTag}"
-        if [ $? -gt 0 -o "x${dockerSha}" = "x" ]; then
-          echo "-- Error: Image SHA calculation failed for ${dockerImage}"
-          return 1
+        if [ "x${dockerITag}" = "x" ]; then
+          getDockerToken "${registryServer}" "${dockerBaseImage}" "${4}" "${5}"
+          if [ $? -gt 0 -o "x${dockerToken}" = "x" ]; then
+            echo "-- Error: Unable to get Docker token"
+            return 1
+          fi
+          getDockerDigest "${registryServer}" "${dockerToken}" "${dockerBaseImage}" "${dockerImageTag}"
+          if [ $? -gt 0 -o "x${dockerSha}" = "x" ]; then
+            echo "-- Error: Image SHA calculation failed for ${dockerImage}"
+            return 1
+          fi
         fi
         imageTag=$(yq eval ".${productId}${tagStr}" ${1})
         if [ "${imageTag}" != "x" ]; then
-          (yq eval --inplace ".${productId}${tagStr}=\"${dockerSha}\"" ${1}) >"${tmpFile}" 2>&1
+          if [ "x${dockerITag}" = "x" ]; then
+            (yq eval --inplace ".${productId}${tagStr}=\"${dockerSha}\"" ${1}) >"${tmpFile}" 2>&1
+          else
+            (yq eval --inplace ".${productId}${tagStr}=\"${dockerITag}\"" ${1}) >"${tmpFile}" 2>&1
+          fi
           if [ $? -gt 0 ]; then
             cat "${tmpFile}"
             rmFile "${tmpFile}"

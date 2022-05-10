@@ -48,6 +48,9 @@ inputs:
   docker-password:
     description: Docker password to use for the login
     required: true
+  image-tag:
+    description: '[Optional] Image tag which is used to override the SHA256 lookup '
+    required: false
   debug:
     description: '[Optional] Debug flag to pass into the command'
     required: false
@@ -62,26 +65,28 @@ runs:
   args:
     - --clone
     - --push
+    - --git-token
+    - '${{ inputs.git-token }}'
     - -mgr
     - '${{ inputs.gitops-repo-url }}'
     - -mf
     - '${{ inputs.manifest-file }}'
-    - -dl
-    - '${{ inputs.image-list }}'
-    - -dlf
-    - '${{ inputs.image-list-file }}'
     - -gu
     - '${{ inputs.github-username }}'
     - -ge
     - '${{ inputs.github-email }}'
-    - -gt
-    - '${{ inputs.github-token }}'
+    - -dl
+    - '${{ inputs.image-list }}'
+    - -dlf
+    - '${{ inputs.image-list-file }}'
     - -dr
     - '${{ inputs.registry-server }}'
     - -du
     - '${{ inputs.docker-username }}'
     - -dp
     - '${{ inputs.docker-password }}'
+    - -dt
+    - '${{ inputs.image-tag }}'
     - -tgs
     - '${{ inputs.tag-string }}'
     - '${{ inputs.debug }}'
