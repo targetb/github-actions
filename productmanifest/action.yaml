@@ -49,8 +49,9 @@ inputs:
     description: Docker password to use for the login
     required: true
   image-tag:
-    description: '[Optional] Image tag which is used to override the SHA256 lookup '
+    description: '[Optional] Image tag which is used to override the SHA256 lookup'
     required: false
+    default: 'null'
   debug:
     description: '[Optional] Debug flag to pass into the command'
     required: false
