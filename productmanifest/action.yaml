@@ -66,20 +66,20 @@ runs:
   args:
     - --clone
     - --push
-    - --git-token
-    - '${{ inputs.git-token }}'
     - -mgr
     - '${{ inputs.gitops-repo-url }}'
     - -mf
     - '${{ inputs.manifest-file }}'
-    - -gu
-    - '${{ inputs.github-username }}'
-    - -ge
-    - '${{ inputs.github-email }}'
     - -dl
     - '${{ inputs.image-list }}'
     - -dlf
     - '${{ inputs.image-list-file }}'
+    - -gu
+    - '${{ inputs.github-username }}'
+    - -ge
+    - '${{ inputs.github-email }}'
+    - -gt
+    - '${{ inputs.github-token }}'
     - -dr
     - '${{ inputs.registry-server }}'
     - -du
