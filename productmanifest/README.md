@@ -25,6 +25,7 @@ The following are the documented parameters for this action...
 | `docker-password` | Docker password to use for the login                                                                                                           | True      |
 | `debug`           | [Optional] Debug flag to pass into the command. Valid value: `--debug`                                                                         | False     |
 | `tag-string`      | [Optional] Tag string to use in the Helm values file. Example: `.containerImage.tag`                                                           | False     |
+| `image-tag`       | [Optional] Specify a tag string which will be used instead of dynamically calculating the SHA                                                  | False     |
 
 You must specify either `image-list` or `image-list-file`.
 
