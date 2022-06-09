@@ -402,7 +402,7 @@ commitManifest() {
   export GIT_COMMITTER_NAME="${2}"
   export GIT_COMMITTER_EMAIL="${3}"
 
-  (git commit --author="${2}" -am "${5}") >"${tmpFile}" 2>&1
+  (git commit -am "${5}") >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
