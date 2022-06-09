@@ -389,6 +389,7 @@ commitManifest() {
     return 1
   fi
 
+  echo "${2}" | sed 's/./& /g'
   (git config --local user.email "${3}" &&
     git config --local user.name "${2}") >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
