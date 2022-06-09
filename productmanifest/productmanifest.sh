@@ -379,7 +379,7 @@ commitManifest() {
   getGitDir "${1}"
 
   cd /tmp/${gitFolder}
-  echo "${command}: Committing product manifests..."
+  echo "${command}: Committing updated product manifests..."
 
   url=$(printf ${1} | sed "s/https:\/\//https:\/\/token:${4}@/g")
   (git remote set-url origin ${url}) >"${tmpFile}" 2>&1
@@ -389,7 +389,6 @@ commitManifest() {
     return 1
   fi
 
-  echo "${2}" | sed 's/./& /g'
   (git config --local user.email "${3}" &&
     git config --local user.name "${2}") >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
