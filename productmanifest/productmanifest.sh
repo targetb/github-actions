@@ -237,6 +237,14 @@ cloneRepo() {
     fi
   fi
 
+  (git config --global credential.helper store &&
+   echo "https://${gitUser}:${gitToken}@github.com" > ~/.git-credentials) >"${tmpFile}" 2>&1
+  if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+  fi
+  
   (git clone ${1}) >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
