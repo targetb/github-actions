@@ -91,6 +91,20 @@ Some environment substitution sample using `ghcr.io`
        docker-password: ${{ env.GITHUB_TOKEN }}
 ```
 
+```yaml
+   - name: GitOps Helm Chart Update(s)
+     uses: targetb/github-actions/productmanifest@main
+     env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}
+     with:
+       gitops-repo-url: https://github.com/targetb/gitops-controller
+       manifest-file: helm/dev/values.yaml
+       github-username: ${{ secrets.GITHUB_USERNAME }}
+       github-email: ${{ secrets.GITHUB_EMAIL }}
+       github-token: ${{ env.GITHUB_TOKEN }}
+       image-list: helm-chart:ghcr.io/${{ github.actor }}/example-service:latest
+ ``
+
 ## Notes
 
 - Make sure you have NO spaces in the dockerlist you submit. If you do, then it will not be parsed
