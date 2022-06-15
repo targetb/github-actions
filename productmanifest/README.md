@@ -21,8 +21,8 @@ The following are the documented parameters for this action...
 | `image-list`      | Image list to process. This is a CSV and takes the form of a string like (helmChartName):(dockerImage):(tag)                                   | False     |
 | `image-list-file` | Image list to process. This is a CSV and takes the form of a string like (helmChartName):(dockerImage):(tag). This will override `image-list`. | False     |
 | `registry-server` | Docker registry server where images are held. Currently, only `docker.io` and `ghcr.io` are supported. Default value: `ghcr.io`                | False     |
-| `docker-username` | Docker username to login as                                                                                                                    | True      |
-| `docker-password` | Docker password to use for the login                                                                                                           | True      |
+| `docker-username` | Docker username to login as                                                                                                                    | False      |
+| `docker-password` | Docker password to use for the login                                                                                                           | False      |
 | `debug`           | [Optional] Debug flag to pass into the command. Valid value: `--debug`                                                                         | False     |
 | `tag-string`      | [Optional] Tag string to use in the Helm values file. Example: `.containerImage.tag`                                                           | False     |
 | `image-tag`       | [Optional] Specify a tag string which will be used instead of dynamically calculating the SHA                                                  | False     |
