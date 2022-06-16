@@ -162,15 +162,15 @@ usage() {
   elif [ "x${gitToken}" = "x" ]; then
     echo "${command}: - Error: GitHub token is missing"
     show_usage
-  elif [ "x${gitComment}" = "x" ]; then
-    gitComment="Updating product manifest for ${registryServer} images on $(date)"
-  elif [ "x${tagStr}" = "x" ]; then
-    tagStr=".image.tag"
   fi
 
   ## This seems to have some odd limit issue...
   if [ "x${dockerITag}" = "xnull" ]; then
     dockerITag=
+  elif [ "x${tagStr}" = "x" ]; then
+    tagStr=".image.tag"
+  elif [ "x${gitComment}" = "x" ]; then
+    gitComment="Updating product manifest for ${registryServer} images on $(date)"
   fi
 
   return 0
