@@ -103,7 +103,7 @@ Some environment substitution sample using `ghcr.io`
        github-email: ${{ secrets.GITHUB_EMAIL }}
        github-token: ${{ env.GITHUB_TOKEN }}
        image-list: helm-chart:ghcr.io/${{ github.actor }}/example-service:latest
- ``
+ ```
 
 ## Notes
 
