@@ -361,8 +361,10 @@ updateManifest() {
         imageTag=$(yq eval ".${productId}${tagStr}" ${1})
         if [ "${imageTag}" != "x" ]; then
           if [ "x${dockerITag}" = "x" ]; then
+            echo "${command}: -- Updating tag ${productId}${tagStr} -> calculated ${dockerSha}..."
             (yq eval --inplace ".${productId}${tagStr}=\"${dockerSha}\"" ${1}) >"${tmpFile}" 2>&1
           else
+            echo "${command}: -- Updating tag ${productId}${tagStr} -> specified ${dockerITag}..."
             (yq eval --inplace ".${productId}${tagStr}=\"${dockerITag}\"" ${1}) >"${tmpFile}" 2>&1
           fi
           if [ $? -gt 0 ]; then
