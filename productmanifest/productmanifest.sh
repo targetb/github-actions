@@ -239,7 +239,7 @@ cloneRepo() {
 
   url=$(echo ${1} | awk -v userName=${gitUser} -v \
                 pwd=${gitToken} '{ url=substr($1,9); printf("https://%s:%s@%s",userName,pwd,url); }')
-                
+
   (git clone ${url}) >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
@@ -353,6 +353,10 @@ updateManifest() {
             echo "-- Error: Image SHA calculation failed for ${dockerImage}"
             return 1
           fi
+        fi
+        if [ "x${dockerITag}" = "x" -a "x${dockerSha}" = "x" ]; then
+            echo "-- Error: Image SHA calculation failed for ${dockerImage}"
+            return 1
         fi
         imageTag=$(yq eval ".${productId}${tagStr}" ${1})
         if [ "${imageTag}" != "x" ]; then
