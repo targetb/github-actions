@@ -162,15 +162,15 @@ usage() {
   elif [ "x${gitToken}" = "x" ]; then
     echo "${command}: - Error: GitHub token is missing"
     show_usage
-  elif [ "x${gitComment}" = "x" ]; then
-    gitComment="Updating product manifest for ${registryServer} images on $(date)"
-  elif [ "x${tagStr}" = "x" ]; then
-    tagStr=".image.tag"
   fi
 
   ## This seems to have some odd limit issue...
   if [ "x${dockerITag}" = "xnull" ]; then
     dockerITag=
+  elif [ "x${tagStr}" = "x" ]; then
+    tagStr=".image.tag"
+  elif [ "x${gitComment}" = "x" ]; then
+    gitComment="Updating product manifest for ${registryServer} images on $(date)"
   fi
 
   return 0
@@ -237,7 +237,10 @@ cloneRepo() {
     fi
   fi
 
-  (git clone ${1}) >"${tmpFile}" 2>&1
+  url=$(echo ${1} | awk -v userName=${gitUser} -v \
+                pwd=${gitToken} '{ url=substr($1,9); printf("https://%s:%s@%s",userName,pwd,url); }')
+
+  (git clone ${url}) >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
@@ -351,11 +354,17 @@ updateManifest() {
             return 1
           fi
         fi
+        if [ "x${dockerITag}" = "x" -a "x${dockerSha}" = "x" ]; then
+            echo "-- Error: Image SHA calculation failed for ${dockerImage}"
+            return 1
+        fi
         imageTag=$(yq eval ".${productId}${tagStr}" ${1})
         if [ "${imageTag}" != "x" ]; then
           if [ "x${dockerITag}" = "x" ]; then
+            echo "${command}: -- Updating tag ${productId}${tagStr} -> calculated ${dockerSha}..."
             (yq eval --inplace ".${productId}${tagStr}=\"${dockerSha}\"" ${1}) >"${tmpFile}" 2>&1
           else
+            echo "${command}: -- Updating tag ${productId}${tagStr} -> specified ${dockerITag}..."
             (yq eval --inplace ".${productId}${tagStr}=\"${dockerITag}\"" ${1}) >"${tmpFile}" 2>&1
           fi
           if [ $? -gt 0 ]; then
@@ -376,7 +385,7 @@ commitManifest() {
   getGitDir "${1}"
 
   cd /tmp/${gitFolder}
-  echo "${command}: Committing product manifests..."
+  echo "${command}: Committing updated product manifests..."
 
   url=$(printf ${1} | sed "s/https:\/\//https:\/\/token:${4}@/g")
   (git remote set-url origin ${url}) >"${tmpFile}" 2>&1
@@ -399,7 +408,7 @@ commitManifest() {
   export GIT_COMMITTER_NAME="${2}"
   export GIT_COMMITTER_EMAIL="${3}"
 
-  (git commit --author="${2}" -am "${5}") >"${tmpFile}" 2>&1
+  (git commit -am "${5}") >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"

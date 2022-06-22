@@ -44,10 +44,10 @@ inputs:
     required: false
   docker-username:
     description: Docker username to login as
-    required: true
+    required: false
   docker-password:
     description: Docker password to use for the login
-    required: true
+    required: false
   image-tag:
     description: '[Optional] Image tag which is used to override the SHA256 lookup'
     required: false
