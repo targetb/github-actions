@@ -112,9 +112,10 @@ Some environment substitution sample using `ghcr.io`
   NOT `chartname:image:tag, chartname:image:tag, chartname:image:tag`
 - This GitHub action has only been tested against `docker.io` and `ghcr.io`. Additional support may
   need to be added for other repo types. This can be done best by using their REST API as `docker`
-  is flaky.
+  is flakey.
 - Currently, this action uses Docker REST APIs rather than docker itself for the work. This is
   because it is generally quicker, but not so portable.
 - If using `docker.io` you will need to specify your DockerHub user password as
   the `docker-password`value.
 - If using `ghcr.io` you will need to use your GitHub PAT token as the `docker-password` value.
+- If this action is used in a very active organisation, you may find it might be necessary to manually resolve merge conflicts at rare times. The action will attempt to resolve most conflicts, but those requiring manual merge will be left
