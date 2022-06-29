@@ -430,30 +430,21 @@ commitManifest() {
     # Updates have happened so we need to catch up with them...
     (git pull) >"${tmpFile}" 2>&1
     if [ $? -gt 0 ]; then
-      cat "${tmpFile}"
-      rmFile "${tmpFile}"
-      return 1
+      (git merge origin/main -m "Auto merge") >"${tmpFile}" 2>&1
+      if [ $? -gt 0 ]; then
+        cat "${tmpFile}"
+        rmFile "${tmpFile}"
+        return 1
+      fi
     fi
 
     (git push) >"${tmpFile}" 2>&1
     if [ $? -gt 0 ]; then
-      # Do we need to merge?
-      (grep 'fatal: Need to specify how to reconcile divergent branches' "${tmpFile}") \
-        >/dev/null 2>&1
-      if [ $? -eq 0 ]; then
-        (git merge origin/main -m "Auto merge") >"${tmpFile}" 2>&1
-        if [ $? -gt 0 ]; then
-          cat "${tmpFile}"
-          rmFile "${tmpFile}"
-          return 1
-        fi
-        (git push) >"${tmpFile}" 2>&1
-        if [ $? -gt 0 ]; then
-          # Greater minds than us should look at this...
-          cat "${tmpFile}"
-          rmFile "${tmpFile}"
-          return 1
-        fi
+      if [ $? -gt 0 ]; then
+        # Greater minds than us should look at this...
+        cat "${tmpFile}"
+        rmFile "${tmpFile}"
+        return 1
       fi
     fi
   fi
