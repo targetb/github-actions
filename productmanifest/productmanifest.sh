@@ -418,9 +418,7 @@ commitManifest() {
   (git push) >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     # Lets check the type of failure that we had...
-    (grep '[rejected]' "${tmpFile}" &&
-      grep 'Updates were rejected because the remote contains work that you do' "${tmpFile}") \
-      >/dev/null 2>&1
+    (grep '[rejected]' "${tmpFile}") >/dev/null 2>&1
     if [ $? -gt 0 ]; then
       cat "${tmpFile}"
       rmFile "${tmpFile}"
