@@ -307,8 +307,9 @@ getDockerDigest() {
       "https://${1}/v2/${3}/manifests/${4}") >"${tmpFile}" 2>&1
   fi
 
-  dockerSha=$(cat "${tmpFile}" | grep -i Docker-Content-Digest | awk '{ print $3 }' | tr '\r' ' ' |
-    awk '{$1=$1;print}')
+  dockerSha=$(cat "${tmpFile}" | grep -i Docker-Content-Digest | \
+    awk '{ print $3 }' | \
+    tr '\r' ' ' | awk '{$1=$1;print}')
 
   retStat=$?
   if [ $retStat -gt 0 ]; then
