@@ -170,7 +170,7 @@ usage() {
   elif [ "x${tagStr}" = "x" ]; then
     tagStr=".image.tag"
   elif [ "x${gitComment}" = "x" ]; then
-    gitComment="Updating product manifest for ${registryServer} images on $(date)"
+    gitComment="Updating product manifest for ${registryServer}"
   fi
 
   return 0
@@ -408,7 +408,12 @@ commitManifest() {
   export GIT_COMMITTER_NAME="${2}"
   export GIT_COMMITTER_EMAIL="${3}"
 
-  (git commit -am "${5}") >"${tmpFile}" 2>&1
+  txtCmt="${5}"
+  if [ "x${6}" != "x" ]; then
+    txtCmt="Docker manifest updated for tag: \"${6}\""
+  fi
+
+  (git commit -am "${txtCmt}") >"${tmpFile}" 2>&1
   if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
@@ -428,7 +433,7 @@ commitManifest() {
     # Updates have happened so we need to catch up with them...
     (git pull) >"${tmpFile}" 2>&1
     if [ $? -gt 0 ]; then
-      (git merge origin/main -m "Auto merge") >"${tmpFile}" 2>&1
+      (git merge origin/main -m "Auto merge - ${txtCmt}") >"${tmpFile}" 2>&1
       if [ $? -gt 0 ]; then
         cat "${tmpFile}"
         rmFile "${tmpFile}"
@@ -482,7 +487,8 @@ fi
 cd $CWD
 
 if [ $push -gt 0 ]; then
-  commitManifest "${manifestGitRepo}" "${gitUser}" "${gitEmail}" "${gitToken}" "${gitComment}"
+  commitManifest "${manifestGitRepo}" "${gitUser}" "${gitEmail}" \
+    "${gitToken}" "${gitComment}" "${dockerITag}"
   if [ $? -ne 0 ]; then
     cd $CWD
     echo "${command}: - Error: Committing the product manifest file failed"
