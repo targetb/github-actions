@@ -40,9 +40,10 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productmanifest
 
       - name: Build and Push image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: productmanifest/
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
