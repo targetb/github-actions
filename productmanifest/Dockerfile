@@ -8,7 +8,7 @@ RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/ma
 RUN apk add --no-cache git docker curl
 
 # renovate: datasource=github-releases depName=mikefarah/yq
-ENV YQ_VERSION="v4.35.1"
+ENV YQ_VERSION="v4.35.2"
 RUN curl -sSLo /usr/bin/yq \
     "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
     && chmod +x /usr/bin/yq
