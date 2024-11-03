@@ -26,6 +26,8 @@ dockerToken=
 
 gitFolder=
 
+releaseTarget=
+
 push=0
 clone=0
 remove=0
@@ -109,6 +111,10 @@ usage() {
       tagStr=$2
       shift 2
       ;;
+    -rt | --release-target)
+      releaseTarget=$2
+      shift 2
+      ;;
     --debug)
       set -xv
       shift
@@ -189,6 +195,7 @@ show_usage() {
   echo "${command}: -du <dockerUser>"
   echo "${command}: -dp <dockerPassword>"
   echo "${command}: -tgs <tagString>"
+  echo "${command}: -rt <releaseTarget>"
   echo "${command}: -m <commitMessage>"
   echo "${command}: --debug"
   echo "${command}: --clone"
@@ -458,6 +465,12 @@ commitManifest() {
 }
 
 usage $*
+
+if [ "x${releaseTarget}" != "x" ]; then
+  echo "Release to ${releaseTarget} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser} ..."
+  echo "Done"
+  exit 0
+fi
 
 if [ "x${userName}" != "x" -a "x${password}" != "x" ]; then
   testDocker "${registryServer}" "${userName}" "${password}"
