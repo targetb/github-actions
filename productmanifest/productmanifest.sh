@@ -464,13 +464,16 @@ commitManifest() {
   return 0
 }
 
-usage $*
+echo "Release script"
 
 if [ "x${releaseTarget}" != "x" ]; then
-  echo "Release to ${releaseTarget} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser} ..."
+  echo "Release to ${releaseTarget} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser} ${gitToken}"
   echo "Done"
   exit 0
 fi
+
+usage $*
+
 
 if [ "x${userName}" != "x" -a "x${password}" != "x" ]; then
   testDocker "${registryServer}" "${userName}" "${password}"
