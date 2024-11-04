@@ -467,13 +467,15 @@ commitManifest() {
 echo "Release script"
 echo "Script was called with: $0 $@"
 
-args=("$@")
 rt_value=""
+args="$@"
 
-for (( i=0; i<${#args[@]}; i++ )); do
-  if [[ "${args[i]}" == "-rt" ]]; then
-    rt_value="${args[i+1]}"
+for arg in $args; do
+  if [ "$arg" = "-rt" ]; then
+    rt_value="$2"
+    break
   fi
+  shift
 done
 
 if [[ "$rt_value" == "QA" || "$rt_value" == "SIT" ]]; then
