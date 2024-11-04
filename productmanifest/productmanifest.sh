@@ -465,6 +465,7 @@ commitManifest() {
 }
 
 echo "Release script"
+echo "Script was called with: $0 $@"
 
 if [ "x${releaseTarget}" != "x" ]; then
   echo "Release to ${releaseTarget} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser} ${gitToken}"
