@@ -467,8 +467,21 @@ commitManifest() {
 echo "Release script"
 echo "Script was called with: $0 $@"
 
-if [ "x${releaseTarget}" != "x" ]; then
-  echo "Release to ${releaseTarget} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser} ${gitToken}"
+args=("$@")
+rt_value=""
+
+for (( i=0; i<${#args[@]}; i++ )); do
+  if [[ "${args[i]}" == "-rt" ]]; then
+    rt_value="${args[i+1]}"
+  fi
+done
+
+if [[ "$rt_value" == "QA" || "$rt_value" == "SIT" ]]; then
+  echo "-rt is set to $rt_value"
+fi
+
+if [ "x${rt_value}" != "x" ]; then
+  echo "Release to ${rt_value} with ${manifestFile} ${dockerList} ${manifestGitRepo} ${gitUser:0:3} ${gitToken:0:3}"
   echo "Done"
   exit 0
 fi
