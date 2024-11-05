@@ -59,9 +59,6 @@ inputs:
     description: '[Optional] Tag string to use in the Helm values file'
     required: false
     default: '.containerImage.tag'
-  release-target:
-    description: 'Copy versions file to target (QA/SIT) from lower env.'
-    required: false
 
 runs:
   using: docker
@@ -93,8 +90,6 @@ runs:
     - '${{ inputs.image-tag }}'
     - -tgs
     - '${{ inputs.tag-string }}'
-    - -rt
-    - '${{ inputs.release-target }}'
     - '${{ inputs.debug }}'
 
 branding:
