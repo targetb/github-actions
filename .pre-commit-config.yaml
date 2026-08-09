@@ -25,11 +25,11 @@ repos:
         args:
           - --exclude-files=renovate.json
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.29.2
+    rev: 0.38.0
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/AleksaC/hadolint-py
-    rev: v2.12.1b3
+    rev: v2.15.1
     hooks:
       - id: hadolint
         args: [ --ignore, DL3018 ]
